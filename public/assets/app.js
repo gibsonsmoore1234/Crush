@@ -93,7 +93,7 @@ async function saveSignature(row) {
 // ---------------------------------------------------------------------------
 function renderGallery() {
   $("#gallery").innerHTML = WORKS.map(([f, t]) => `
-    <figure><img src="/images/works/${f}.jpg" alt="${t ? esc(t) : "Artwork"}" loading="lazy"></figure>`).join("");
+    <figure><img src="/images/works/${f}.jpg" alt="Artwork" loading="lazy"></figure>`).join("");
 }
 
 
