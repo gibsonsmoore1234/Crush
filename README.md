@@ -1,6 +1,6 @@
-# Gibson Moore Art Commission
+# Duke University Student Art Commission
 
-A student petition asking Duke University to fund a 12-painting series by student artist Gibson Moore.
+A student petition asking Duke University to fund a 12-painting series by a Duke student artist.
 
 The site is independent and student-led. It is not an official Duke University site, and the page footer says so.
 
@@ -8,7 +8,7 @@ The site is independent and student-led. It is not an official Duke University s
 
 - **Home** (`/`): the headline, a short statement, and links to sign or read the proposal.
 - **Proposal** (`/proposal`): the twelve paintings in four sizes and the planning sketch.
-- **Artist's Work** (`/work`): a gallery of Gibson Moore's paintings and drawings.
+- **Artist's Work** (`/work`): a gallery of current Duke University artist works.
 - **Sign** (`/sign`): the petition form, a live counter toward 10,000, recent supporters and their comments.
 
 The colors are Duke blue, white, black and grey. The artwork keeps its own colors.
