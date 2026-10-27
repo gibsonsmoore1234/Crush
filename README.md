@@ -1,18 +1,17 @@
 # Gibson Moore Art Commission
 
-A one-page student petition. It asks Duke Arts, Duke Student Government and Campus Facilities to fund a $30,000, 10-piece permanent painting series by student artist Gibson Moore.
+A student petition asking Duke University to fund a $30,000, 12-painting series by student artist Gibson Moore.
 
 The site is independent and student-led. It is not an official Duke University site, and the page footer says so.
 
-## What's on the page
+## Pages
 
-1. **Hero.** A close-up of a painting with the headline, the mission statement and a **Sign the petition** button that scrolls to the form.
-2. **Project breakdown.** The vision for the 10-piece series, the $30,000 budget as a bar and a table, and why the commission should go to a student.
-3. **Petition form.** Name, `@duke.edu` email, affiliation, an authorization checkbox and/or a drawn signature, and an optional comment.
-4. **Live progress.** A counter toward 10,000 signatures, a feed of recent supporters ("Alex M. (Undergrad) signed 5 minutes ago") and supporters' comments.
-5. **Footer.** Share buttons for Instagram Story, GroupMe and r/duke, a press link, contact details and the disclaimer.
+- **Home** (`/`): the headline, a short statement, and links to sign or read the proposal.
+- **Proposal** (`/proposal`): the twelve paintings in four sizes, the planning sketch, and the $30,000 budget.
+- **Artist's Work** (`/work`): a gallery of Gibson Moore's paintings and drawings.
+- **Sign** (`/sign`): the petition form, a live counter toward 10,000, recent supporters and their comments.
 
-Everything is in Duke blue, white, black and grey. The paintings keep their own colours.
+The colors are Duke blue, white, black and grey. The artwork keeps its own colors.
 
 **Every number and name on the page is real.** The counter, feed and quotes come only from actual signatures. Nothing is seeded, so a new site starts at 0.
 

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Proposal — Gibson Moore Art Commission</title>
+  <meta name="description" content="A proposed series of twelve paintings for Duke University by student artist Gibson Moore.">
+  <meta name="theme-color" content="#012169">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="/assets/site.css">
+  <script src="/env.js"></script>
+  <script src="/assets/vendor/supabase-2.115.0.js"></script>
+  <script type="module" src="/assets/app.js"></script>
+</head>
+<body data-page="proposal">
+  <div id="preview-banner" class="preview-banner" hidden>Preview mode — signatures are saved only in this browser until the database is connected.</div>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="/" class="brand">Duke University Gibson Moore Art Commission</a>
+      <nav class="nav" aria-label="Main">
+        <a href="/">Home</a>
+        <a href="/proposal" aria-current="page">Proposal</a>
+        <a href="/work">Artist's Work</a>
+        <a href="/sign" class="nav-cta">Sign</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <section class="section">
+      <div class="wrap">
+        <p class="eyebrow">The proposal</p>
+        <h1 class="page-title">Twelve paintings</h1>
+        <p class="lede narrow-text">Twelve oil paintings in four sizes.</p>
+
+        <div class="series">
+          <article class="tier">
+            <div class="tier-head"><span class="tier-count">2</span><div><h2>14 × 10 ft</h2><p class="muted">Oil painting</p></div></div>
+            <ul><li>A Duke football game</li><li>A Duke basketball game</li></ul>
+          </article>
+          <article class="tier">
+            <div class="tier-head"><span class="tier-count">4</span><div><h2>5 × 7 ft</h2><p class="muted">Oil painting</p></div></div>
+            <ul><li>Other Duke sports</li><li>The student body</li><li>Academic learning in progress — for example a robotics lab, a chemistry lab or an economics classroom</li></ul>
+          </article>
+          <article class="tier">
+            <div class="tier-head"><span class="tier-count">2</span><div><h2>3.5 × 2.5 ft</h2><p class="muted">Oil painting</p></div></div>
+            <ul><li>Subjects in the same spirit, such as Duke's campuses and well-known spots</li><li>Students having lunch and enjoying their recreational time</li></ul>
+          </article>
+          <article class="tier">
+            <div class="tier-head"><span class="tier-count">4</span><div><h2>1.25 × 1.75 ft</h2><p class="muted">Oil painting</p></div></div>
+            <ul><li>Portraits of the Blue Devil — possibly four different versions</li><li>Or other subjects, chosen by the public</li></ul>
+          </article>
+        </div>
+
+        <figure class="sketch">
+          <img src="/images/proposal-sketch.jpg" alt="Gibson Moore's pen sketch planning the series: two 14 by 10 foot paintings of a football game and a basketball game, four 5 by 7 foot paintings, two 3.5 by 2.5 foot paintings and four 1.25 by 1.75 foot paintings including a Blue Devil portrait">
+          <figcaption>Planning sketch for the series.</figcaption>
+        </figure>
+
+        <div class="budget-block">
+          <h2>Budget: $30,000</h2>
+          <div class="budget-bar" id="budget-bar" role="img" aria-label="Budget split"></div>
+          <table class="budget-table" id="budget-table"><tbody></tbody><tfoot><tr><th>Total</th><td>$30,000</td></tr></tfoot></table>
+        </div>
+
+        <div class="why">
+          <h2>Why a student artist</h2>
+          <p class="narrow-text">Major campus art should be created by Duke's own students rather than outsourced to outside contractors.</p>
+        </div>
+
+        <p class="actions"><a href="/sign" class="btn">Sign the petition</a></p>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="wrap footer-grid">
+      <div>
+        <h3>Share</h3>
+        <div class="share">
+          <button class="btn btn-outline" data-share="instagram">Instagram Story</button>
+          <button class="btn btn-outline" data-share="groupme">GroupMe</button>
+          <a class="btn btn-outline" id="share-reddit" target="_blank" rel="noopener">r/duke</a>
+        </div>
+        <p class="share-note" id="share-note" aria-live="polite"></p>
+      </div>
+      <div>
+        <h3>Press</h3>
+        <p id="press">The Duke Chronicle — link to follow.</p>
+      </div>
+      <div>
+        <h3>Contact</h3>
+        <p><a href="mailto:gibson.moore@duke.edu?subject=Art%20Commission">gibson.moore@duke.edu</a></p>
+      </div>
+    </div>
+    <p class="wrap disclaimer">An independent student proposal. This is not an official Duke University website.</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Artist's Work — Gibson Moore</title>
+  <meta name="description" content="A proposed series of twelve paintings for Duke University by student artist Gibson Moore.">
+  <meta name="theme-color" content="#012169">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="/assets/site.css">
+  <script src="/env.js"></script>
+  <script src="/assets/vendor/supabase-2.115.0.js"></script>
+  <script type="module" src="/assets/app.js"></script>
+</head>
+<body data-page="work">
+  <div id="preview-banner" class="preview-banner" hidden>Preview mode — signatures are saved only in this browser until the database is connected.</div>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="/" class="brand">Duke University Gibson Moore Art Commission</a>
+      <nav class="nav" aria-label="Main">
+        <a href="/">Home</a>
+        <a href="/proposal">Proposal</a>
+        <a href="/work" aria-current="page">Artist's Work</a>
+        <a href="/sign" class="nav-cta">Sign</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <section class="section">
+      <div class="wrap">
+        <p class="eyebrow">Gibson Moore</p>
+        <h1 class="page-title">Artist's work</h1>
+        <p class="lede narrow-text">Selected paintings and drawings. More at <a href="https://www.stevensosmoore.com" target="_blank" rel="noopener">stevensosmoore.com</a>.</p>
+        <div class="gallery" id="gallery"></div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="wrap footer-grid">
+      <div>
+        <h3>Share</h3>
+        <div class="share">
+          <button class="btn btn-outline" data-share="instagram">Instagram Story</button>
+          <button class="btn btn-outline" data-share="groupme">GroupMe</button>
+          <a class="btn btn-outline" id="share-reddit" target="_blank" rel="noopener">r/duke</a>
+        </div>
+        <p class="share-note" id="share-note" aria-live="polite"></p>
+      </div>
+      <div>
+        <h3>Press</h3>
+        <p id="press">The Duke Chronicle — link to follow.</p>
+      </div>
+      <div>
+        <h3>Contact</h3>
+        <p><a href="mailto:gibson.moore@duke.edu?subject=Art%20Commission">gibson.moore@duke.edu</a></p>
+      </div>
+    </div>
+    <p class="wrap disclaimer">An independent student proposal. This is not an official Duke University website.</p>
+  </footer>
+</body>
+</html>

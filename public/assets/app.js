@@ -6,7 +6,7 @@
 const CONFIG = {
   goal: 10000,
   chronicleUrl: "", // paste The Duke Chronicle article URL here once it's published
-  shareText: "Sign the petition for a $30,000 student-made art series in Duke's public spaces.",
+  shareText: "Sign the petition for a $30,000 student art series for Duke University.",
 };
 
 const BUDGET = [
@@ -87,9 +87,9 @@ async function saveSignature(row) {
 // ---------------------------------------------------------------------------
 // Render: strip, budget, stats
 // ---------------------------------------------------------------------------
-function renderStrip() {
-  const items = WORKS.map(([f, t]) => `<figure><img src="/images/works/${f}.jpg" alt="${esc(t)} by Gibson Moore" loading="lazy"><figcaption>${esc(t)}</figcaption></figure>`).join("");
-  $("#strip").innerHTML = items + items.replace(/alt="[^"]*"/g, 'alt="" aria-hidden="true"');
+function renderGallery() {
+  $("#gallery").innerHTML = WORKS.map(([f, t]) => `
+    <figure><img src="/images/works/${f}.jpg" alt="${esc(t)} by Gibson Moore" loading="lazy"><figcaption>${esc(t)}</figcaption></figure>`).join("");
 }
 
 function renderBudget() {
@@ -112,6 +112,7 @@ async function refreshStats() {
   let stats;
   try { stats = await loadStats(); } catch { return; }
   document.querySelectorAll("[data-count]").forEach((el) => (el.textContent = fmt(stats.total)));
+  if (!$("#feed")) return;
   $("#goal").textContent = fmt(CONFIG.goal);
   $("#tracker-fill").style.width = stats.total ? `${Math.min(100, Math.max(1.5, (stats.total / CONFIG.goal) * 100))}%` : "0";
 
@@ -122,16 +123,18 @@ async function refreshStats() {
     || `<li class="muted">No signatures yet — be the first.</li>`;
   lastTopId = topId;
 
+  if (!$("#quotes")) return;
   const quotes = stats.recent.filter((s) => s.comment && s.comment.trim().length >= 12).slice(0, 9);
   $("#quotes").innerHTML = quotes.map((s) => `
     <blockquote class="quote"><p>“${esc(s.comment.trim())}”</p><footer>— ${esc(s.display_name)}, ${esc(AFFILIATIONS[s.affiliation] || "")}</footer></blockquote>`).join("")
-    || `<p class="empty">Supporters' comments will appear here as people sign. Leave one with your signature.</p>`;
+    || `<p class="empty">Comments from supporters will appear here.</p>`;
 }
 
 // ---------------------------------------------------------------------------
 // Signature pad
 // ---------------------------------------------------------------------------
-const pad = $("#pad");
+const page = document.body.dataset.page;
+const pad = $("#pad") || document.createElement("canvas");
 const ctx = pad.getContext("2d");
 let drawn = false, drawing = false, last = null;
 
@@ -152,7 +155,7 @@ pad.addEventListener("pointermove", (e) => {
   last = p; drawn = true;
 });
 ["pointerup", "pointercancel", "pointerleave"].forEach((t) => pad.addEventListener(t, () => (drawing = false)));
-$("#pad-clear").onclick = () => { ctx.clearRect(0, 0, pad.width, pad.height); drawn = false; };
+if ($("#pad-clear")) $("#pad-clear").onclick = () => { ctx.clearRect(0, 0, pad.width, pad.height); drawn = false; };
 window.addEventListener("resize", sizePad);
 
 // Trimmed, downscaled PNG so stored signatures stay small.
@@ -168,7 +171,7 @@ function signaturePng() {
 // ---------------------------------------------------------------------------
 // Form
 // ---------------------------------------------------------------------------
-const form = $("#petition");
+const form = $("#petition") || document.createElement("form");
 const showErr = (msg) => { const e = $("#form-err"); e.textContent = msg; e.hidden = !msg; if (msg) e.scrollIntoView({ block: "nearest", behavior: "smooth" }); };
 
 function collect() {
@@ -192,9 +195,10 @@ function collect() {
 }
 
 function done(title, body) {
+  if (!$("#form-body")) return;
   $("#form-body").hidden = true;
   const d = $("#form-done");
-  d.innerHTML = `<h3>${title}</h3><p>${body}</p><a class="btn" href="#voices">See why others signed</a>`;
+  d.innerHTML = `<h3>${title}</h3><p>${body}</p><a class="btn" href="/proposal">View the proposal</a>`;
   d.hidden = false;
 }
 
@@ -215,7 +219,7 @@ form.addEventListener("submit", async (e) => {
     // Verify the Duke email: Supabase sends a confirmation link; the signature
     // is saved when they come back through it (see finishPending below).
     store.set(PENDING_KEY, row);
-    const { error } = await sb.auth.signInWithOtp({ email: row.email, options: { emailRedirectTo: `${location.origin}/#sign`, shouldCreateUser: true } });
+    const { error } = await sb.auth.signInWithOtp({ email: row.email, options: { emailRedirectTo: `${location.origin}/sign`, shouldCreateUser: true } });
     if (error) throw error;
     done("Check your Duke inbox.", `We sent a confirmation link to <strong>${esc(row.email)}</strong>. Click it to finish — your signature is counted once your Duke email is confirmed.`);
   } catch (ex) {
@@ -239,13 +243,13 @@ async function finishPending(session) {
   }
   await sb.auth.signOut();
   refreshStats();
-  document.getElementById("sign").scrollIntoView();
+
 }
 
 // ---------------------------------------------------------------------------
 // Share
 // ---------------------------------------------------------------------------
-const pageUrl = () => location.origin + location.pathname;
+const pageUrl = () => location.origin + "/sign";
 const note = (msg) => { $("#share-note").textContent = msg; };
 
 async function shareOrCopy(hint) {
@@ -257,13 +261,13 @@ async function shareOrCopy(hint) {
 }
 document.querySelector('[data-share="instagram"]').onclick = () => shareOrCopy("Add it to your Instagram Story with a link sticker.");
 document.querySelector('[data-share="groupme"]').onclick = () => shareOrCopy("Paste it into your GroupMe chats.");
-$("#share-reddit").href = `https://www.reddit.com/r/duke/submit?url=${encodeURIComponent(pageUrl())}&title=${encodeURIComponent("Petition: fund a $30,000 student-made permanent art series on campus")}`;
+$("#share-reddit").href = `https://www.reddit.com/r/duke/submit?url=${encodeURIComponent(pageUrl())}&title=${encodeURIComponent("Petition: a $30,000 student art series for Duke University")}`;
 if (CONFIG.chronicleUrl) $("#press").innerHTML = `<a href="${esc(CONFIG.chronicleUrl)}" target="_blank" rel="noopener">Read The Duke Chronicle feature →</a>`;
 
 // ---------------------------------------------------------------------------
-renderStrip();
-renderBudget();
-sizePad();
+if (page === "work") renderGallery();
+if (page === "proposal") renderBudget();
+if (page === "sign") sizePad();
 refreshStats();
 setInterval(refreshStats, 30000);
 if (sb) {

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Sign the Petition — Gibson Moore Art Commission</title>
+  <meta name="description" content="A proposed series of twelve paintings for Duke University by student artist Gibson Moore.">
+  <meta name="theme-color" content="#012169">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="/assets/site.css">
+  <script src="/env.js"></script>
+  <script src="/assets/vendor/supabase-2.115.0.js"></script>
+  <script type="module" src="/assets/app.js"></script>
+</head>
+<body data-page="sign">
+  <div id="preview-banner" class="preview-banner" hidden>Preview mode — signatures are saved only in this browser until the database is connected.</div>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="/" class="brand">Duke University Gibson Moore Art Commission</a>
+      <nav class="nav" aria-label="Main">
+        <a href="/">Home</a>
+        <a href="/proposal">Proposal</a>
+        <a href="/work">Artist's Work</a>
+        <a href="/sign" aria-current="page" class="nav-cta">Sign</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <section class="section">
+      <div class="wrap grid-petition">
+        <div>
+          <p class="eyebrow">Petition</p>
+          <h1 class="page-title">Sign the petition</h1>
+          <p class="narrow-text">Ask Duke University to fund the twelve-painting series by student artist Gibson Moore. <a href="/proposal">See the proposal</a>.</p>
+          <div class="tracker">
+            <div class="tracker-bar"><i id="tracker-fill"></i></div>
+            <p class="tracker-label" aria-live="polite"><strong data-count>—</strong> / <span id="goal">10,000</span> signatures</p>
+          </div>
+          <h3>Recent supporters</h3>
+          <ul class="feed" id="feed"><li class="muted">Loading…</li></ul>
+        </div>
+
+        <form id="petition" class="card form" novalidate>
+          <div id="form-body">
+            <label class="field">Full name <span class="req">*</span>
+              <input name="full_name" required minlength="3" maxlength="80" autocomplete="name" placeholder="First and Last Name">
+            </label>
+            <label class="field">Duke email address <span class="req">*</span>
+              <input name="email" type="email" required autocomplete="email" placeholder="netid@duke.edu">
+              <small>Used solely to verify current Duke student/community status. Your email will not be shared or spammed.</small>
+            </label>
+            <label class="field">Affiliation <span class="req">*</span>
+              <select name="affiliation" required>
+                <option value="" disabled selected>Choose one</option>
+                <option value="undergrad">Undergraduate Student</option>
+                <option value="grad">Graduate Student</option>
+                <option value="faculty_staff">Duke Faculty &amp; Staff</option>
+                <option value="alumni">Alumni</option>
+              </select>
+            </label>
+            <fieldset class="field sig">
+              <legend>Signature</legend>
+              <label class="check"><input type="checkbox" name="authorized"> I authorize my name to be included in the petition presented to Duke University.</label>
+              <p class="or">and/or draw your signature</p>
+              <div class="pad-wrap">
+                <canvas id="pad" aria-label="Signature pad: draw with your finger or mouse"></canvas>
+                <button type="button" class="link" id="pad-clear">Clear</button>
+              </div>
+            </fieldset>
+            <label class="field">Why do you want to see more student-created art in Duke buildings? <span class="opt">(optional)</span>
+              <textarea name="comment" rows="3" maxlength="500"></textarea>
+            </label>
+            <label class="check small"><input type="checkbox" name="comment_public" checked> Show my comment with my first name and last initial</label>
+            <p class="err" id="form-err" hidden></p>
+            <button class="btn btn-block" id="submit">Add my signature to the commission</button>
+          </div>
+          <div id="form-done" class="done" hidden></div>
+        </form>
+      </div>
+    </section>
+
+    <section class="section section-grey" id="voices">
+      <div class="wrap">
+        <h2>From supporters</h2>
+        <div class="quotes" id="quotes"></div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="wrap footer-grid">
+      <div>
+        <h3>Share</h3>
+        <div class="share">
+          <button class="btn btn-outline" data-share="instagram">Instagram Story</button>
+          <button class="btn btn-outline" data-share="groupme">GroupMe</button>
+          <a class="btn btn-outline" id="share-reddit" target="_blank" rel="noopener">r/duke</a>
+        </div>
+        <p class="share-note" id="share-note" aria-live="polite"></p>
+      </div>
+      <div>
+        <h3>Press</h3>
+        <p id="press">The Duke Chronicle — link to follow.</p>
+      </div>
+      <div>
+        <h3>Contact</h3>
+        <p><a href="mailto:gibson.moore@duke.edu?subject=Art%20Commission">gibson.moore@duke.edu</a></p>
+      </div>
+    </div>
+    <p class="wrap disclaimer">An independent student proposal. This is not an official Duke University website.</p>
+  </footer>
+</body>
+</html>
