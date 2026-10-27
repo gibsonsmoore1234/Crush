@@ -46,39 +46,31 @@
 
         <form id="petition" class="card form" novalidate>
           <div id="form-body">
-            <fieldset class="field who">
-              <legend>I am signing as <span class="req">*</span></legend>
-              <div class="segmented">
-                <label><input type="radio" name="affiliation" value="undergrad" required><span>Duke undergraduate</span></label>
-                <label><input type="radio" name="affiliation" value="grad"><span>Duke graduate student</span></label>
-                <label><input type="radio" name="affiliation" value="public"><span>Everyone else</span></label>
+            <div class="segmented" role="radiogroup" aria-label="Signer type">
+              <label><input type="radio" name="affiliation" value="student"><span>Duke student</span></label>
+              <label><input type="radio" name="affiliation" value="public"><span>Anyone else</span></label>
+            </div>
+            <label class="field">Name <span class="req">*</span>
+              <input name="full_name" required maxlength="80" autocomplete="name" placeholder="First and Last Name">
+            </label>
+            <label class="field">Email <span class="opt">(optional)</span>
+              <input name="email" type="text" inputmode="email" maxlength="254" autocomplete="email" placeholder="you@example.com">
+            </label>
+            <fieldset class="field sig">
+              <legend>Signature <span class="opt">(optional)</span></legend>
+              <label class="check"><input type="checkbox" name="authorized"> I authorize my name to be included in the petition presented to Duke University.</label>
+              <p class="or">and/or draw your signature</p>
+              <div class="pad-wrap">
+                <canvas id="pad" aria-label="Signature pad: draw with your finger or mouse"></canvas>
+                <button type="button" class="link" id="pad-clear">Clear</button>
               </div>
             </fieldset>
-            <div id="fields" hidden>
-              <label class="field">Full name <span class="req" data-student>*</span><span class="opt" data-public>(optional)</span>
-                <input name="full_name" maxlength="80" autocomplete="name" placeholder="First and Last Name">
-              </label>
-              <label class="field"><span data-student>Duke email address</span><span data-public>Email address</span> <span class="req">*</span>
-                <input name="email" type="email" required autocomplete="email" placeholder="netid@duke.edu">
-                <small data-student>Used solely to verify current Duke student status. Your email will not be shared or spammed.</small>
-                <small data-public>Used only to confirm your signature. Your email will not be shared or spammed.</small>
-              </label>
-              <fieldset class="field sig">
-                <legend>Signature <span class="opt" data-public>(optional)</span></legend>
-                <label class="check"><input type="checkbox" name="authorized"> I authorize my name to be included in the petition presented to Duke University.</label>
-                <p class="or">and/or draw your signature</p>
-                <div class="pad-wrap">
-                  <canvas id="pad" aria-label="Signature pad: draw with your finger or mouse"></canvas>
-                  <button type="button" class="link" id="pad-clear">Clear</button>
-                </div>
-              </fieldset>
             <label class="field">Why do you want to see more student-created art in Duke buildings? <span class="opt">(optional)</span>
               <textarea name="comment" rows="3" maxlength="500"></textarea>
             </label>
             <label class="check small"><input type="checkbox" name="comment_public" checked> Show my comment with my first name and last initial</label>
-            <button class="btn btn-block" id="submit">Add my signature to the commission</button>
-            </div>
             <p class="err" id="form-err" hidden></p>
+            <button class="btn btn-block" id="submit">Add my signature to the commission</button>
           </div>
           <div id="form-done" class="done" hidden></div>
         </form>

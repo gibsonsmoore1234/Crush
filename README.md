@@ -17,18 +17,15 @@ The colors are Duke blue, white, black and grey. The artwork keeps its own color
 
 ## Who can sign
 
-- **Duke students** (undergraduate or graduate): full name, an `@duke.edu` email, and the authorization box or a drawn signature are required.
-- **Everyone else:** only an email is required. Name, signature and comment are optional.
+Signers choose **Duke student** or **Anyone else**. Only a name is required; email, signature and comment are optional. Signatures save immediately: no sign-in and no confirmation email. That also means entries aren't verified, and the same person could sign more than once. Moderators can hide a row by setting `hidden = true`.
 
-Everyone confirms their email by clicking a link Supabase sends them, and each email can sign once. The page shows the total plus separate counts for Duke students and other supporters. Emails and drawn signatures are never public; names show as "First L.", or "A supporter" if no name was given.
+The page shows the total plus separate counts for Duke students and everyone else. Emails and drawn signatures are never public; names show as "First L.".
 
 ## Setup
 
 ### 1. Supabase
 
 1. Create a project. In **SQL Editor**, run [`supabase/schema.sql`](supabase/schema.sql).
-2. Under **Authentication → URL Configuration**, set **Site URL** to your Vercel URL. Then add `https://YOUR-SITE/**` under **Redirect URLs**.
-3. Under **Authentication → Providers → Email**, leave Email turned on. Supabase's built-in email sender is rate-limited, so before launch go to **Authentication → SMTP** and add a sender such as Resend or Postmark.
 
 ### 2. Vercel
 

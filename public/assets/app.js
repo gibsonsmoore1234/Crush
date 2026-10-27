@@ -48,9 +48,7 @@ const WORKS = [
   ["charcoal-figure", "Charcoal Figure"],
 ];
 
-const AFFILIATIONS = { undergrad: "Duke undergrad", grad: "Duke grad student", public: "Supporter" };
-const isStudent = (a) => a === "undergrad" || a === "grad";
-const PENDING_KEY = "commission.pending";
+const isStudent = (a) => a === "student" || a === "undergrad" || a === "grad";
 
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
@@ -58,7 +56,7 @@ const fmt = (n) => n.toLocaleString("en-US");
 
 const ENV = window.__ENV__ || {};
 const sb = ENV.SUPABASE_URL && ENV.SUPABASE_ANON_KEY && window.supabase
-  ? window.supabase.createClient(ENV.SUPABASE_URL, ENV.SUPABASE_ANON_KEY, { auth: { persistSession: true, detectSessionInUrl: true, flowType: "implicit" } })
+  ? window.supabase.createClient(ENV.SUPABASE_URL, ENV.SUPABASE_ANON_KEY, { auth: { persistSession: false } })
   : null;
 if (!sb) $("#preview-banner").hidden = false;
 
@@ -87,14 +85,13 @@ async function loadStats() {
 async function saveSignature(row) {
   if (!sb) {
     const all = store.get("commission.preview") || [];
-    if (all.some((s) => s.email === row.email)) throw new Error("already");
     const parts = (row.full_name || "").trim().split(/\s+/).filter(Boolean);
     all.push({ ...row, display_name: !parts.length ? "A supporter" : parts.length > 1 ? `${parts[0]} ${parts.at(-1)[0]}.` : parts[0], comment: row.comment_public ? row.comment : null, created_at: new Date().toISOString() });
     store.set("commission.preview", all);
     return;
   }
   const { error } = await sb.from("signatures").insert(row);
-  if (error) throw new Error(error.code === "23505" ? "already" : error.message);
+  if (error) throw new Error(error.message);
 }
 
 // ---------------------------------------------------------------------------
@@ -134,14 +131,14 @@ async function refreshStats() {
   const topId = stats.recent[0]?.id ?? stats.recent[0]?.created_at;
   $("#feed").innerHTML = stats.recent.slice(0, 25).map((s, i) => `
     <li class="${i === 0 && lastTopId && topId !== lastTopId ? "new" : ""}"><strong>${esc(s.display_name)}</strong>
-      ${isStudent(s.affiliation) ? `(${esc(AFFILIATIONS[s.affiliation])}) ` : ""}signed <span class="muted">${ago(s.created_at)}</span></li>`).join("")
+      ${isStudent(s.affiliation) ? "(Duke student) " : ""}signed <span class="muted">${ago(s.created_at)}</span></li>`).join("")
     || `<li class="muted">No signatures yet — be the first.</li>`;
   lastTopId = topId;
 
   if (!$("#quotes")) return;
   const quotes = stats.recent.filter((s) => s.comment && s.comment.trim().length >= 12).slice(0, 9);
   $("#quotes").innerHTML = quotes.map((s) => `
-    <blockquote class="quote"><p>“${esc(s.comment.trim())}”</p><footer>— ${esc(s.display_name)}${isStudent(s.affiliation) ? `, ${esc(AFFILIATIONS[s.affiliation])}` : ""}</footer></blockquote>`).join("")
+    <blockquote class="quote"><p>“${esc(s.comment.trim())}”</p><footer>— ${esc(s.display_name)}${isStudent(s.affiliation) ? ", Duke student" : ""}</footer></blockquote>`).join("")
     || `<p class="empty">Comments from supporters will appear here.</p>`;
 }
 
@@ -191,40 +188,23 @@ const showErr = (msg) => { const e = $("#form-err"); e.textContent = msg; e.hidd
 
 function collect() {
   const f = form.elements;
-  const affiliation = form.querySelector("[name=affiliation]:checked")?.value || "";
-  const student = isStudent(affiliation);
   const row = {
-    full_name: f.full_name.value.trim().replace(/\s+/g, " ") || null,
-    email: f.email.value.trim().toLowerCase(),
-    affiliation,
+    full_name: f.full_name.value.trim().replace(/\s+/g, " "),
+    affiliation: form.querySelector("[name=affiliation]:checked")?.value || "public",
+    email: f.email.value.trim() || null,
     authorized: f.authorized.checked,
     signature_png: signaturePng(),
     comment: f.comment.value.trim() || null,
     comment_public: f.comment_public.checked,
   };
-  [f.full_name, f.email].forEach((el) => el.removeAttribute("aria-invalid"));
-  const bad = (el, msg) => { el.setAttribute("aria-invalid", "true"); el.focus(); throw new Error(msg); };
-  if (!affiliation) throw new Error("Choose whether you're signing as a Duke student or a supporter.");
-  if (student && (row.full_name || "").split(" ").length < 2) bad(f.full_name, "Please enter your first and last name.");
-  if (student && !/^[^@\s]+@duke\.edu$/i.test(row.email)) bad(f.email, "Duke students: please use your @duke.edu email address.");
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(row.email)) bad(f.email, "Please enter a valid email address.");
-  if (student && !row.authorized && !row.signature_png) throw new Error("Tick the authorization box or draw your signature.");
+  f.full_name.removeAttribute("aria-invalid");
+  if (!row.full_name) {
+    f.full_name.setAttribute("aria-invalid", "true");
+    f.full_name.focus();
+    throw new Error("Please enter your name.");
+  }
   return row;
 }
-
-// Show the right labels and requirements for students vs. everyone else.
-function applyAffiliation() {
-  const a = form.querySelector("[name=affiliation]:checked")?.value;
-  if (!a) return;
-  const student = isStudent(a);
-  $("#fields").hidden = false;
-  form.querySelectorAll("[data-student]").forEach((el) => (el.hidden = !student));
-  form.querySelectorAll("[data-public]").forEach((el) => (el.hidden = student));
-  form.elements.email.placeholder = student ? "netid@duke.edu" : "you@example.com";
-  form.elements.full_name.required = student;
-  sizePad();
-}
-form.querySelectorAll("[name=affiliation]").forEach((r) => r.addEventListener("change", applyAffiliation));
 
 function done(title, body) {
   if (!$("#form-body")) return;
@@ -242,41 +222,15 @@ form.addEventListener("submit", async (e) => {
   const btn = $("#submit");
   btn.disabled = true; btn.textContent = "Submitting…";
   try {
-    if (!sb) {
-      await saveSignature(row);
-      done("Thank you — you're on the petition.", "Your signature has been added. Share the page so more people sign.");
-      refreshStats();
-      return;
-    }
-    // Confirm the email: Supabase sends a confirmation link; the signature
-    // is saved when they come back through it (see finishPending below).
-    store.set(PENDING_KEY, row);
-    const { error } = await sb.auth.signInWithOtp({ email: row.email, options: { emailRedirectTo: `${location.origin}/sign`, shouldCreateUser: true } });
-    if (error) throw error;
-    done("Check your inbox.", `We sent a confirmation link to <strong>${esc(row.email)}</strong>. Click it to finish — your signature is counted once your email is confirmed.`);
+    await saveSignature(row);
+    done("Thank you — you're on the petition.", "Your signature has been added. Share the page so more people sign.");
+    refreshStats();
   } catch (ex) {
-    showErr(ex.message === "already" ? "This email has already signed. Thank you!" : `Something went wrong: ${ex.message}`);
+    showErr(`Something went wrong: ${ex.message}`);
   } finally {
     btn.disabled = false; btn.textContent = "Add my signature to the commission";
   }
 });
-
-async function finishPending(session) {
-  const row = store.get(PENDING_KEY);
-  if (!row || !session) return;
-  if ((session.user.email || "").toLowerCase() !== row.email) return;
-  store.del(PENDING_KEY);
-  try {
-    await saveSignature(row);
-    done("Confirmed — you're on the petition.", "Your email is confirmed and your signature has been added. Thank you!");
-  } catch (ex) {
-    if (ex.message === "already") done("You've already signed.", "This email is already on the petition. Thank you!");
-    else showErr(`We couldn't save your signature: ${ex.message}`);
-  }
-  await sb.auth.signOut();
-  refreshStats();
-
-}
 
 // ---------------------------------------------------------------------------
 // Share
@@ -302,7 +256,4 @@ if (page === "proposal") renderBudget();
 if (page === "sign") sizePad();
 refreshStats();
 setInterval(refreshStats, 30000);
-if (sb) {
-  sb.auth.getSession().then(({ data }) => finishPending(data.session));
-  sb.auth.onAuthStateChange((event, session) => { if (event === "SIGNED_IN") finishPending(session); });
-}
+
