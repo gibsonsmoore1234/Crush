@@ -199,3 +199,6 @@ input[aria-invalid=true], select[aria-invalid=true] { border-color: var(--black)
 .social-icons { display: flex; gap: 1.25rem; margin-top: 2rem; }
 .social-icons a { color: var(--white); opacity: .85; }
 .social-icons a:hover { opacity: 1; }
+.locations { margin: 0 0 3rem; }
+.loc-list { list-style: none; padding: 0; margin: 1rem 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: .5rem; }
+.loc-list li { background: var(--grey-1); border-left: 3px solid var(--blue); padding: .6rem .85rem; font-weight: 500; }
