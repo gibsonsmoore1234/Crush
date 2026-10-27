@@ -203,4 +203,3 @@ input[aria-invalid=true], select[aria-invalid=true] { border-color: var(--black)
 .loc-list { list-style: none; padding: 0; margin: 1rem 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: .5rem; }
 .loc-list li { background: var(--grey-1); border-left: 3px solid var(--blue); padding: .6rem .85rem; font-weight: 500; }
 .ideas { margin: 2.5rem 0 3rem; }
-.why-title { color: #6b21a8; }
