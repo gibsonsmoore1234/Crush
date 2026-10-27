@@ -10,10 +10,18 @@ const CONFIG = {
 };
 
 const BUDGET = [
-  { amount: 10000, label: "Two 14 × 10 ft paintings — $5,000 each", color: "#012169" },
-  { amount: 10000, label: "Four 5 × 7 ft paintings — $2,500 each", color: "#1f3d8a" },
-  { amount: 2500, label: "Two 3.5 × 2.5 ft paintings — $1,250 each", color: "#4b5563" },
-  { amount: 2500, label: "Four 1.25 × 1.75 ft paintings — $625 each", color: "#9ca3af" },
+  { amount: 5000, label: "Painting 1: 14 × 10 ft — football game", color: "#012169" },
+  { amount: 5000, label: "Painting 2: 14 × 10 ft — basketball game", color: "#012169" },
+  { amount: 2500, label: "Painting 3: 5 × 7 ft", color: "#1f3d8a" },
+  { amount: 2500, label: "Painting 4: 5 × 7 ft", color: "#1f3d8a" },
+  { amount: 2500, label: "Painting 5: 5 × 7 ft", color: "#1f3d8a" },
+  { amount: 2500, label: "Painting 6: 5 × 7 ft", color: "#1f3d8a" },
+  { amount: 1250, label: "Painting 7: 3.5 × 2.5 ft", color: "#4b5563" },
+  { amount: 1250, label: "Painting 8: 3.5 × 2.5 ft", color: "#4b5563" },
+  { amount: 625, label: "Painting 9: 1.25 × 1.75 ft", color: "#9ca3af" },
+  { amount: 625, label: "Painting 10: 1.25 × 1.75 ft", color: "#9ca3af" },
+  { amount: 625, label: "Painting 11: 1.25 × 1.75 ft", color: "#9ca3af" },
+  { amount: 625, label: "Painting 12: 1.25 × 1.75 ft", color: "#9ca3af" },
   { amount: 5000, label: "Transportation, setup and other costs", color: "#000000" },
 ];
 
