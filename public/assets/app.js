@@ -6,7 +6,7 @@
 const CONFIG = {
   goal: 10000,
   chronicleUrl: "", // paste The Duke Chronicle article URL here once it's published
-  shareText: "Sign the petition for a Duke University funded student art series by Gibson Moore.",
+  shareText: "Sign the request to Duke University to commission a student art series by Gibson Moore.",
 };
 
 
@@ -234,7 +234,7 @@ async function shareOrCopy(hint) {
 }
 document.querySelector('[data-share="instagram"]').onclick = () => shareOrCopy("Add it to your Instagram Story with a link sticker.");
 document.querySelector('[data-share="groupme"]').onclick = () => shareOrCopy("Paste it into your GroupMe chats.");
-$("#share-reddit").href = `https://www.reddit.com/r/duke/submit?url=${encodeURIComponent(pageUrl())}&title=${encodeURIComponent("Petition: Duke University funded student art series by Gibson Moore")}`;
+$("#share-reddit").href = `https://www.reddit.com/r/duke/submit?url=${encodeURIComponent(pageUrl())}&title=${encodeURIComponent("Request to Duke University to Commission a Student Art Series by Gibson Moore")}`;
 if (CONFIG.chronicleUrl) $("#press").innerHTML = `<a href="${esc(CONFIG.chronicleUrl)}" target="_blank" rel="noopener">Read The Duke Chronicle feature →</a>`;
 
 // ---------------------------------------------------------------------------
