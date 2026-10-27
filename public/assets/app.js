@@ -197,7 +197,7 @@ function done(title, body) {
   if (!$("#form-body")) return;
   $("#form-body").hidden = true;
   const d = $("#form-done");
-  d.innerHTML = `<h3>${title}</h3><p>${body}</p><a class="btn" href="/proposal">View the proposal</a>`;
+  d.innerHTML = `<h3>${title}</h3><p>${body}</p><a class="btn" href="/proposal">View the possible proposals</a>`;
   d.hidden = false;
 }
 
