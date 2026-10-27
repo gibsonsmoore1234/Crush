@@ -66,21 +66,17 @@ async function loadStats() {
   if (!sb) {
     const all = store.get("commission.preview") || [];
     const students = all.filter((x) => isStudent(x.affiliation)).length;
-    return { total: all.length, students, others: all.length - students, recent: all.slice().reverse() };
+    return { total: all.length, students, others: all.length - students };
   }
-  const [{ data: c, error: e1 }, { data: r, error: e2 }] = await Promise.all([
-    sb.from("signature_count").select("total,students,others").single(),
-    sb.from("recent_signers").select("*"),
-  ]);
-  if (e1 || e2) dbProblem(e1 || e2);
-  return { total: c?.total ?? 0, students: c?.students ?? 0, others: c?.others ?? 0, recent: r || [] };
+  const { data: c, error } = await sb.from("signature_count").select("total,students,others").single();
+  if (error) dbProblem(error);
+  return { total: c?.total ?? 0, students: c?.students ?? 0, others: c?.others ?? 0 };
 }
 
 async function saveSignature(row) {
   if (!sb) {
     const all = store.get("commission.preview") || [];
-    const parts = (row.full_name || "").trim().split(/\s+/).filter(Boolean);
-    all.push({ ...row, display_name: !parts.length ? "A supporter" : parts.length > 1 ? `${parts[0]} ${parts.at(-1)[0]}.` : parts[0], comment: row.comment_public ? row.comment : null, created_at: new Date().toISOString() });
+    all.push({ affiliation: row.affiliation, created_at: new Date().toISOString() });
     store.set("commission.preview", all);
     return;
   }
@@ -104,29 +100,15 @@ function ago(iso) {
   return "just now";
 }
 
-let lastTopId = null;
 async function refreshStats() {
   let stats;
   try { stats = await loadStats(); } catch { return; }
   document.querySelectorAll("[data-count]").forEach((el) => (el.textContent = fmt(stats.total)));
   document.querySelectorAll("[data-students]").forEach((el) => (el.textContent = fmt(stats.students)));
   document.querySelectorAll("[data-others]").forEach((el) => (el.textContent = fmt(stats.others)));
-  if (!$("#feed")) return;
+  if (!$("#tracker-fill")) return;
   $("#goal").textContent = fmt(CONFIG.goal);
   $("#tracker-fill").style.width = stats.total ? `${Math.min(100, Math.max(1.5, (stats.total / CONFIG.goal) * 100))}%` : "0";
-
-  const topId = stats.recent[0]?.id ?? stats.recent[0]?.created_at;
-  $("#feed").innerHTML = stats.recent.slice(0, 25).map((s, i) => `
-    <li class="${i === 0 && lastTopId && topId !== lastTopId ? "new" : ""}"><strong>${esc(s.display_name)}</strong>
-      ${isStudent(s.affiliation) ? "(Duke student) " : ""}signed <span class="muted">${ago(s.created_at)}</span></li>`).join("")
-    || `<li class="muted">No signatures yet — be the first.</li>`;
-  lastTopId = topId;
-
-  if (!$("#quotes")) return;
-  const quotes = stats.recent.filter((s) => s.comment && s.comment.trim().length >= 12).slice(0, 9);
-  $("#quotes").innerHTML = quotes.map((s) => `
-    <blockquote class="quote"><p>“${esc(s.comment.trim())}”</p><footer>— ${esc(s.display_name)}${isStudent(s.affiliation) ? ", Duke student" : ""}</footer></blockquote>`).join("")
-    || `<p class="empty">Comments from supporters will appear here.</p>`;
 }
 
 // ---------------------------------------------------------------------------
@@ -182,7 +164,7 @@ function collect() {
     authorized: f.authorized.checked,
     signature_png: signaturePng(),
     comment: f.comment.value.trim() || null,
-    comment_public: f.comment_public.checked,
+    comment_public: false,
   };
   f.full_name.removeAttribute("aria-invalid");
   if (!row.full_name) {
@@ -210,7 +192,7 @@ form.addEventListener("submit", async (e) => {
   btn.disabled = true; btn.textContent = "Submitting…";
   try {
     await saveSignature(row);
-    done("Thank you for your support.", "Your signature has been added. Share the page so more people sign.");
+    done("Thank you for your support.", "Your support has been recorded. Share the page so more people sign.");
     refreshStats();
   } catch (ex) {
     showErr(`Something went wrong: ${ex.message}`);

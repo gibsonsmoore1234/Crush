@@ -4,8 +4,7 @@
 -- Anyone can sign straight from the page (no sign-in, no confirmation email).
 -- Only a name is required; email, drawn signature and comment are optional.
 -- Signers mark themselves as a Duke student or anyone else.
--- Emails and drawn signatures are never public: visitors only read counts and
--- "First L." names through the views below.
+-- Nothing about individual signers is public: visitors only read the counts.
 
 create table if not exists public.signatures (
   id bigint generated always as identity primary key,
@@ -68,22 +67,7 @@ with (security_invoker = false) as
          count(*) filter (where affiliation = 'public')::int as others
   from public.signatures;
 
--- Public: recent signers as "First L." Comments only when the signer ticked
--- "show my comment".
+-- No public list of signers: names and comments are visible only in the Supabase dashboard.
 drop view if exists public.recent_signers;
-create view public.recent_signers
-with (security_invoker = false) as
-  select id,
-         case when cardinality(p.parts) > 1
-              then p.parts[1] || ' ' || left(p.parts[cardinality(p.parts)], 1) || '.'
-              else p.parts[1] end as display_name,
-         case when affiliation in ('student', 'undergrad', 'grad') then 'student' else 'public' end as affiliation,
-         case when comment_public then comment end as comment,
-         created_at
-  from public.signatures,
-       lateral (select regexp_split_to_array(trim(full_name), '\s+') as parts) p
-  where not hidden
-  order by created_at desc
-  limit 50;
 
-grant select on public.signature_count, public.recent_signers to anon, authenticated;
+grant select on public.signature_count to anon, authenticated;

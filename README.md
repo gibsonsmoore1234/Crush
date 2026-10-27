@@ -9,17 +9,17 @@ The site is independent and student-led. It is not an official Duke University s
 - **Home** (`/`): the headline, a short statement, and links to sign or read the proposal.
 - **Proposal** (`/proposal`): possible subjects and locations.
 - **Artist's Work** (`/work`): a gallery of current Duke University artist works.
-- **Sign** (`/sign`): the petition form, a live counter toward 10,000, recent supporters and their comments.
+- **Sign** (`/sign`): the sign form and a live counter toward 10,000.
 
 The colors are Duke blue, white, black and grey. The artwork keeps its own colors.
 
-**Every number and name on the page is real.** The counter, feed and quotes come only from actual signatures. Nothing is seeded, so a new site starts at 0.
+**Every number and name on the page is real.** The counter comes only from actual signatures. Nothing is seeded, so a new site starts at 0.
 
 ## Who can sign
 
 Signers choose **Duke student** or **Anyone else**. Only a name is required; email, signature and comment are optional. Signatures save immediately: no sign-in and no confirmation email. That also means entries aren't verified, and the same person could sign more than once. Moderators can hide a row by setting `hidden = true`.
 
-The page shows the total plus separate counts for Duke students and everyone else. Emails and drawn signatures are never public; names show as "First L.".
+The page shows the total plus separate counts for Duke students and everyone else. No names, emails or comments are shown publicly; they're visible only in the Supabase dashboard.
 
 ## Setup
 
