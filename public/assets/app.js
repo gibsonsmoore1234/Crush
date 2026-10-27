@@ -197,7 +197,7 @@ form.addEventListener("submit", async (e) => {
   } catch (ex) {
     showErr(`Something went wrong: ${ex.message}`);
   } finally {
-    btn.disabled = false; btn.textContent = "Add my signature to the commission";
+    btn.disabled = false; btn.textContent = "Add my signature for the push!";
   }
 });
 
