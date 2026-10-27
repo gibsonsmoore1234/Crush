@@ -48,7 +48,8 @@ const WORKS = [
   ["charcoal-figure", "Charcoal Figure"],
 ];
 
-const AFFILIATIONS = { undergrad: "Undergrad", grad: "Grad Student", faculty_staff: "Faculty & Staff", alumni: "Alumni" };
+const AFFILIATIONS = { undergrad: "Duke undergrad", grad: "Duke grad student", public: "Supporter" };
+const isStudent = (a) => a === "undergrad" || a === "grad";
 const PENDING_KEY = "commission.pending";
 
 const $ = (s) => document.querySelector(s);
@@ -73,21 +74,22 @@ const store = {
 async function loadStats() {
   if (!sb) {
     const all = store.get("commission.preview") || [];
-    return { total: all.length, recent: all.slice().reverse() };
+    const students = all.filter((x) => isStudent(x.affiliation)).length;
+    return { total: all.length, students, others: all.length - students, recent: all.slice().reverse() };
   }
   const [{ data: c }, { data: r }] = await Promise.all([
-    sb.from("signature_count").select("total").single(),
+    sb.from("signature_count").select("total,students,others").single(),
     sb.from("recent_signers").select("*"),
   ]);
-  return { total: c?.total ?? 0, recent: r || [] };
+  return { total: c?.total ?? 0, students: c?.students ?? 0, others: c?.others ?? 0, recent: r || [] };
 }
 
 async function saveSignature(row) {
   if (!sb) {
     const all = store.get("commission.preview") || [];
     if (all.some((s) => s.email === row.email)) throw new Error("already");
-    const parts = row.full_name.trim().split(/\s+/);
-    all.push({ ...row, display_name: parts.length > 1 ? `${parts[0]} ${parts.at(-1)[0]}.` : parts[0], comment: row.comment_public ? row.comment : null, created_at: new Date().toISOString() });
+    const parts = (row.full_name || "").trim().split(/\s+/).filter(Boolean);
+    all.push({ ...row, display_name: !parts.length ? "A supporter" : parts.length > 1 ? `${parts[0]} ${parts.at(-1)[0]}.` : parts[0], comment: row.comment_public ? row.comment : null, created_at: new Date().toISOString() });
     store.set("commission.preview", all);
     return;
   }
@@ -123,6 +125,8 @@ async function refreshStats() {
   let stats;
   try { stats = await loadStats(); } catch { return; }
   document.querySelectorAll("[data-count]").forEach((el) => (el.textContent = fmt(stats.total)));
+  document.querySelectorAll("[data-students]").forEach((el) => (el.textContent = fmt(stats.students)));
+  document.querySelectorAll("[data-others]").forEach((el) => (el.textContent = fmt(stats.others)));
   if (!$("#feed")) return;
   $("#goal").textContent = fmt(CONFIG.goal);
   $("#tracker-fill").style.width = stats.total ? `${Math.min(100, Math.max(1.5, (stats.total / CONFIG.goal) * 100))}%` : "0";
@@ -130,14 +134,14 @@ async function refreshStats() {
   const topId = stats.recent[0]?.id ?? stats.recent[0]?.created_at;
   $("#feed").innerHTML = stats.recent.slice(0, 25).map((s, i) => `
     <li class="${i === 0 && lastTopId && topId !== lastTopId ? "new" : ""}"><strong>${esc(s.display_name)}</strong>
-      (${esc(AFFILIATIONS[s.affiliation] || "")}) signed <span class="muted">${ago(s.created_at)}</span></li>`).join("")
+      ${isStudent(s.affiliation) ? `(${esc(AFFILIATIONS[s.affiliation])}) ` : ""}signed <span class="muted">${ago(s.created_at)}</span></li>`).join("")
     || `<li class="muted">No signatures yet — be the first.</li>`;
   lastTopId = topId;
 
   if (!$("#quotes")) return;
   const quotes = stats.recent.filter((s) => s.comment && s.comment.trim().length >= 12).slice(0, 9);
   $("#quotes").innerHTML = quotes.map((s) => `
-    <blockquote class="quote"><p>“${esc(s.comment.trim())}”</p><footer>— ${esc(s.display_name)}, ${esc(AFFILIATIONS[s.affiliation] || "")}</footer></blockquote>`).join("")
+    <blockquote class="quote"><p>“${esc(s.comment.trim())}”</p><footer>— ${esc(s.display_name)}${isStudent(s.affiliation) ? `, ${esc(AFFILIATIONS[s.affiliation])}` : ""}</footer></blockquote>`).join("")
     || `<p class="empty">Comments from supporters will appear here.</p>`;
 }
 
@@ -187,23 +191,40 @@ const showErr = (msg) => { const e = $("#form-err"); e.textContent = msg; e.hidd
 
 function collect() {
   const f = form.elements;
+  const affiliation = form.querySelector("[name=affiliation]:checked")?.value || "";
+  const student = isStudent(affiliation);
   const row = {
-    full_name: f.full_name.value.trim().replace(/\s+/g, " "),
+    full_name: f.full_name.value.trim().replace(/\s+/g, " ") || null,
     email: f.email.value.trim().toLowerCase(),
-    affiliation: f.affiliation.value,
+    affiliation,
     authorized: f.authorized.checked,
     signature_png: signaturePng(),
     comment: f.comment.value.trim() || null,
     comment_public: f.comment_public.checked,
   };
-  [f.full_name, f.email, f.affiliation].forEach((el) => el.removeAttribute("aria-invalid"));
+  [f.full_name, f.email].forEach((el) => el.removeAttribute("aria-invalid"));
   const bad = (el, msg) => { el.setAttribute("aria-invalid", "true"); el.focus(); throw new Error(msg); };
-  if (row.full_name.split(" ").length < 2) bad(f.full_name, "Please enter your first and last name.");
-  if (!/^[^@\s]+@duke\.edu$/i.test(row.email)) bad(f.email, "Please use your @duke.edu email address.");
-  if (!row.affiliation) bad(f.affiliation, "Please choose your affiliation.");
-  if (!row.authorized && !row.signature_png) throw new Error("Tick the authorization box or draw your signature.");
+  if (!affiliation) throw new Error("Choose whether you're signing as a Duke student or a supporter.");
+  if (student && (row.full_name || "").split(" ").length < 2) bad(f.full_name, "Please enter your first and last name.");
+  if (student && !/^[^@\s]+@duke\.edu$/i.test(row.email)) bad(f.email, "Duke students: please use your @duke.edu email address.");
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(row.email)) bad(f.email, "Please enter a valid email address.");
+  if (student && !row.authorized && !row.signature_png) throw new Error("Tick the authorization box or draw your signature.");
   return row;
 }
+
+// Show the right labels and requirements for students vs. everyone else.
+function applyAffiliation() {
+  const a = form.querySelector("[name=affiliation]:checked")?.value;
+  if (!a) return;
+  const student = isStudent(a);
+  $("#fields").hidden = false;
+  form.querySelectorAll("[data-student]").forEach((el) => (el.hidden = !student));
+  form.querySelectorAll("[data-public]").forEach((el) => (el.hidden = student));
+  form.elements.email.placeholder = student ? "netid@duke.edu" : "you@example.com";
+  form.elements.full_name.required = student;
+  sizePad();
+}
+form.querySelectorAll("[name=affiliation]").forEach((r) => r.addEventListener("change", applyAffiliation));
 
 function done(title, body) {
   if (!$("#form-body")) return;
@@ -223,18 +244,18 @@ form.addEventListener("submit", async (e) => {
   try {
     if (!sb) {
       await saveSignature(row);
-      done("Thank you — you're on the petition.", "Your signature has been added. Share the page so more Duke students sign.");
+      done("Thank you — you're on the petition.", "Your signature has been added. Share the page so more people sign.");
       refreshStats();
       return;
     }
-    // Verify the Duke email: Supabase sends a confirmation link; the signature
+    // Confirm the email: Supabase sends a confirmation link; the signature
     // is saved when they come back through it (see finishPending below).
     store.set(PENDING_KEY, row);
     const { error } = await sb.auth.signInWithOtp({ email: row.email, options: { emailRedirectTo: `${location.origin}/sign`, shouldCreateUser: true } });
     if (error) throw error;
-    done("Check your Duke inbox.", `We sent a confirmation link to <strong>${esc(row.email)}</strong>. Click it to finish — your signature is counted once your Duke email is confirmed.`);
+    done("Check your inbox.", `We sent a confirmation link to <strong>${esc(row.email)}</strong>. Click it to finish — your signature is counted once your email is confirmed.`);
   } catch (ex) {
-    showErr(ex.message === "already" ? "This Duke email has already signed. Thank you!" : `Something went wrong: ${ex.message}`);
+    showErr(ex.message === "already" ? "This email has already signed. Thank you!" : `Something went wrong: ${ex.message}`);
   } finally {
     btn.disabled = false; btn.textContent = "Add my signature to the commission";
   }
@@ -247,9 +268,9 @@ async function finishPending(session) {
   store.del(PENDING_KEY);
   try {
     await saveSignature(row);
-    done("Confirmed — you're on the petition.", "Your Duke email is verified and your signature has been added. Thank you!");
+    done("Confirmed — you're on the petition.", "Your email is confirmed and your signature has been added. Thank you!");
   } catch (ex) {
-    if (ex.message === "already") done("You've already signed.", "This Duke email is already on the petition. Thank you!");
+    if (ex.message === "already") done("You've already signed.", "This email is already on the petition. Thank you!");
     else showErr(`We couldn't save your signature: ${ex.message}`);
   }
   await sb.auth.signOut();

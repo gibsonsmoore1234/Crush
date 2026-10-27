@@ -38,6 +38,7 @@
           <div class="tracker">
             <div class="tracker-bar"><i id="tracker-fill"></i></div>
             <p class="tracker-label" aria-live="polite"><strong data-count>—</strong> / <span id="goal">10,000</span> signatures</p>
+            <p class="split"><span><strong data-students>—</strong> Duke students</span><span><strong data-others>—</strong> other supporters</span></p>
           </div>
           <h3>Recent supporters</h3>
           <ul class="feed" id="feed"><li class="muted">Loading…</li></ul>
@@ -45,37 +46,39 @@
 
         <form id="petition" class="card form" novalidate>
           <div id="form-body">
-            <label class="field">Full name <span class="req">*</span>
-              <input name="full_name" required minlength="3" maxlength="80" autocomplete="name" placeholder="First and Last Name">
-            </label>
-            <label class="field">Duke email address <span class="req">*</span>
-              <input name="email" type="email" required autocomplete="email" placeholder="netid@duke.edu">
-              <small>Used solely to verify current Duke student/community status. Your email will not be shared or spammed.</small>
-            </label>
-            <label class="field">Affiliation <span class="req">*</span>
-              <select name="affiliation" required>
-                <option value="" disabled selected>Choose one</option>
-                <option value="undergrad">Undergraduate Student</option>
-                <option value="grad">Graduate Student</option>
-                <option value="faculty_staff">Duke Faculty &amp; Staff</option>
-                <option value="alumni">Alumni</option>
-              </select>
-            </label>
-            <fieldset class="field sig">
-              <legend>Signature</legend>
-              <label class="check"><input type="checkbox" name="authorized"> I authorize my name to be included in the petition presented to Duke University.</label>
-              <p class="or">and/or draw your signature</p>
-              <div class="pad-wrap">
-                <canvas id="pad" aria-label="Signature pad: draw with your finger or mouse"></canvas>
-                <button type="button" class="link" id="pad-clear">Clear</button>
+            <fieldset class="field who">
+              <legend>I am signing as <span class="req">*</span></legend>
+              <div class="segmented">
+                <label><input type="radio" name="affiliation" value="undergrad" required><span>Duke undergraduate</span></label>
+                <label><input type="radio" name="affiliation" value="grad"><span>Duke graduate student</span></label>
+                <label><input type="radio" name="affiliation" value="public"><span>Everyone else</span></label>
               </div>
             </fieldset>
+            <div id="fields" hidden>
+              <label class="field">Full name <span class="req" data-student>*</span><span class="opt" data-public>(optional)</span>
+                <input name="full_name" maxlength="80" autocomplete="name" placeholder="First and Last Name">
+              </label>
+              <label class="field"><span data-student>Duke email address</span><span data-public>Email address</span> <span class="req">*</span>
+                <input name="email" type="email" required autocomplete="email" placeholder="netid@duke.edu">
+                <small data-student>Used solely to verify current Duke student status. Your email will not be shared or spammed.</small>
+                <small data-public>Used only to confirm your signature. Your email will not be shared or spammed.</small>
+              </label>
+              <fieldset class="field sig">
+                <legend>Signature <span class="opt" data-public>(optional)</span></legend>
+                <label class="check"><input type="checkbox" name="authorized"> I authorize my name to be included in the petition presented to Duke University.</label>
+                <p class="or">and/or draw your signature</p>
+                <div class="pad-wrap">
+                  <canvas id="pad" aria-label="Signature pad: draw with your finger or mouse"></canvas>
+                  <button type="button" class="link" id="pad-clear">Clear</button>
+                </div>
+              </fieldset>
             <label class="field">Why do you want to see more student-created art in Duke buildings? <span class="opt">(optional)</span>
               <textarea name="comment" rows="3" maxlength="500"></textarea>
             </label>
             <label class="check small"><input type="checkbox" name="comment_public" checked> Show my comment with my first name and last initial</label>
-            <p class="err" id="form-err" hidden></p>
             <button class="btn btn-block" id="submit">Add my signature to the commission</button>
+            </div>
+            <p class="err" id="form-err" hidden></p>
           </div>
           <div id="form-done" class="done" hidden></div>
         </form>

@@ -15,16 +15,12 @@ The colors are Duke blue, white, black and grey. The artwork keeps its own color
 
 **Every number and name on the page is real.** The counter, feed and quotes come only from actual signatures. Nothing is seeded, so a new site starts at 0.
 
-## How signatures are verified
+## Who can sign
 
-When someone submits the form, Supabase emails a confirmation link to their `@duke.edu` address. The signature is saved only after they click that link.
+- **Duke students** (undergraduate or graduate): full name, an `@duke.edu` email, and the authorization box or a drawn signature are required.
+- **Everyone else:** only an email is required. Name, signature and comment are optional.
 
-The database enforces three rules:
-- the email must be the one the signer confirmed;
-- it must end in `@duke.edu`;
-- each email can sign only once.
-
-Emails and drawn signatures are never shown publicly. Visitors see the total count and names shortened to "First L.", plus comments the signer chose to make public.
+Everyone confirms their email by clicking a link Supabase sends them, and each email can sign once. The page shows the total plus separate counts for Duke students and other supporters. Emails and drawn signatures are never public; names show as "First L.", or "A supporter" if no name was given.
 
 ## Setup
 
