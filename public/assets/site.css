@@ -181,3 +181,4 @@ input[aria-invalid=true], select[aria-invalid=true] { border-color: var(--black)
   .nav { gap: 1rem; flex-wrap: wrap; }
   .site-header { position: static; }
 }
+.budget-note { font-size: .9rem; color: var(--grey-4); margin-top: 1rem; }

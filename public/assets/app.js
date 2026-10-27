@@ -10,15 +10,18 @@ const CONFIG = {
 };
 
 const BUDGET = [
-  { amount: 10000, label: "Artist Commission & Production Fee", color: "#012169" },
-  { amount: 6500, label: "Raw Materials & Fine Art Supplies", color: "#1f3d8a" },
-  { amount: 5000, label: "Archival Framing & Preservation", color: "#4b5563" },
-  { amount: 4000, label: "Site Mounting, Facilities Safety & Lighting", color: "#000000" },
-  { amount: 2500, label: "Studio Operations & Ventilation Logistics", color: "#9ca3af" },
-  { amount: 2000, label: "Digital Documentation & Fine Art Transit", color: "#d1d5db" },
+  { amount: 10000, label: "Two 14 × 10 ft paintings — $5,000 each", color: "#012169" },
+  { amount: 10000, label: "Four 5 × 7 ft paintings — $2,500 each", color: "#1f3d8a" },
+  { amount: 2500, label: "Two 3.5 × 2.5 ft paintings — $1,250 each", color: "#4b5563" },
+  { amount: 2500, label: "Four 1.25 × 1.75 ft paintings — $625 each", color: "#9ca3af" },
+  { amount: 5000, label: "Transportation, setup and other costs", color: "#000000" },
 ];
 
 const WORKS = [
+  ["new-field-painting", ""],
+  ["new-fisherman-painting", ""],
+  ["new-portrait-drawing", ""],
+  ["new-flowers-drawing", ""],
   ["airship-over-the-glass-city", "Airship over the Glass City"],
   ["teal-harlequin", "Harlequin in Teal"],
   ["the-procession", "The Procession"],
@@ -89,7 +92,7 @@ async function saveSignature(row) {
 // ---------------------------------------------------------------------------
 function renderGallery() {
   $("#gallery").innerHTML = WORKS.map(([f, t]) => `
-    <figure><img src="/images/works/${f}.jpg" alt="${esc(t)} by Gibson Moore" loading="lazy"><figcaption>${esc(t)}</figcaption></figure>`).join("");
+    <figure><img src="/images/works/${f}.jpg" alt="${t ? esc(t) + " by Gibson Moore" : "Artwork by Gibson Moore"}" loading="lazy">${t ? `<figcaption>${esc(t)}</figcaption>` : ""}</figure>`).join("");
 }
 
 function renderBudget() {
