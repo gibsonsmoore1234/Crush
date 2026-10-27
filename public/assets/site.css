@@ -182,3 +182,6 @@ input[aria-invalid=true], select[aria-invalid=true] { border-color: var(--black)
   .site-header { position: static; }
 }
 .budget-note { font-size: .9rem; color: var(--grey-4); margin-top: 1rem; }
+.about { max-width: 62ch; margin: 1.5rem 0 2.5rem; padding: 1.5rem 0 1.5rem 1.25rem; border-left: 3px solid var(--blue); }
+.about h2 { font-size: 1.4rem; margin-bottom: .5rem; }
+.about p { margin: 0; font-size: 1.05rem; }
