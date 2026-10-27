@@ -210,7 +210,7 @@ form.addEventListener("submit", async (e) => {
   btn.disabled = true; btn.textContent = "Submitting…";
   try {
     await saveSignature(row);
-    done("Thank you — you're on the petition.", "Your signature has been added. Share the page so more people sign.");
+    done("Thank you for your support.", "Your signature has been added. Share the page so more people sign.");
     refreshStats();
   } catch (ex) {
     showErr(`Something went wrong: ${ex.message}`);
