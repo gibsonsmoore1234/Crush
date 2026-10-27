@@ -60,6 +60,14 @@ const sb = ENV.SUPABASE_URL && ENV.SUPABASE_ANON_KEY && window.supabase
   : null;
 if (!sb) $("#preview-banner").hidden = false;
 
+// Make database problems visible instead of silently showing 0 / losing signatures.
+function dbProblem(err) {
+  const b = $("#preview-banner");
+  b.textContent = `Signatures are not being saved: the database isn't set up yet (${err.message}). Run supabase/schema.sql in Supabase.`;
+  b.classList.add("db-error");
+  b.hidden = false;
+}
+
 const store = {
   get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
@@ -75,10 +83,11 @@ async function loadStats() {
     const students = all.filter((x) => isStudent(x.affiliation)).length;
     return { total: all.length, students, others: all.length - students, recent: all.slice().reverse() };
   }
-  const [{ data: c }, { data: r }] = await Promise.all([
+  const [{ data: c, error: e1 }, { data: r, error: e2 }] = await Promise.all([
     sb.from("signature_count").select("total,students,others").single(),
     sb.from("recent_signers").select("*"),
   ]);
+  if (e1 || e2) dbProblem(e1 || e2);
   return { total: c?.total ?? 0, students: c?.students ?? 0, others: c?.others ?? 0, recent: r || [] };
 }
 

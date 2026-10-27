@@ -194,3 +194,4 @@ input[aria-invalid=true], select[aria-invalid=true] { border-color: var(--black)
 .split { display: flex; gap: 1.5rem; margin: -1.25rem 0 2rem; color: var(--grey-4); font-size: .92rem; }
 .split strong { color: var(--ink); }
 
+.preview-banner.db-error { background: var(--black); color: var(--white); font-weight: 600; }
