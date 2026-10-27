@@ -196,3 +196,6 @@ input[aria-invalid=true], select[aria-invalid=true] { border-color: var(--black)
 
 .preview-banner.db-error { background: var(--black); color: var(--white); font-weight: 600; }
 .about .socials { display: flex; flex-wrap: wrap; gap: 1.25rem; margin-top: .9rem; font-size: .95rem; font-weight: 600; }
+.social-icons { display: flex; gap: 1.25rem; margin-top: 2rem; }
+.social-icons a { color: var(--white); opacity: .85; }
+.social-icons a:hover { opacity: 1; }
