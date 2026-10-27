@@ -7,7 +7,7 @@ The site is independent and student-led. It is not an official Duke University s
 ## Pages
 
 - **Home** (`/`): the headline, a short statement, and links to sign or read the proposal.
-- **Proposal** (`/proposal`): the twelve paintings in four sizes and the planning sketch.
+- **Proposal** (`/proposal`): the twelve paintings in four sizes.
 - **Artist's Work** (`/work`): a gallery of current Duke University artist works.
 - **Sign** (`/sign`): the petition form, a live counter toward 10,000, recent supporters and their comments.
 
