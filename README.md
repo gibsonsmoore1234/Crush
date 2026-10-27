@@ -1,13 +1,13 @@
 # Gibson Moore Art Commission
 
-A student petition asking Duke University to fund a $30,000, 12-painting series by student artist Gibson Moore.
+A student petition asking Duke University to fund a 12-painting series by student artist Gibson Moore.
 
 The site is independent and student-led. It is not an official Duke University site, and the page footer says so.
 
 ## Pages
 
 - **Home** (`/`): the headline, a short statement, and links to sign or read the proposal.
-- **Proposal** (`/proposal`): the twelve paintings in four sizes, the planning sketch, and the $30,000 budget.
+- **Proposal** (`/proposal`): the twelve paintings in four sizes and the planning sketch.
 - **Artist's Work** (`/work`): a gallery of Gibson Moore's paintings and drawings.
 - **Sign** (`/sign`): the petition form, a live counter toward 10,000, recent supporters and their comments.
 

@@ -6,24 +6,9 @@
 const CONFIG = {
   goal: 10000,
   chronicleUrl: "", // paste The Duke Chronicle article URL here once it's published
-  shareText: "Sign the petition for a $30,000 student art series for Duke University.",
+  shareText: "Sign the petition for a Duke University funded student art series by Gibson Moore.",
 };
 
-const BUDGET = [
-  { amount: 5000, label: "Painting 1: 14 × 10 ft — football game", color: "#012169" },
-  { amount: 5000, label: "Painting 2: 14 × 10 ft — basketball game", color: "#012169" },
-  { amount: 2500, label: "Painting 3: 5 × 7 ft", color: "#1f3d8a" },
-  { amount: 2500, label: "Painting 4: 5 × 7 ft", color: "#1f3d8a" },
-  { amount: 2500, label: "Painting 5: 5 × 7 ft", color: "#1f3d8a" },
-  { amount: 2500, label: "Painting 6: 5 × 7 ft", color: "#1f3d8a" },
-  { amount: 1250, label: "Painting 7: 3.5 × 2.5 ft", color: "#4b5563" },
-  { amount: 1250, label: "Painting 8: 3.5 × 2.5 ft", color: "#4b5563" },
-  { amount: 625, label: "Painting 9: 1.25 × 1.75 ft", color: "#9ca3af" },
-  { amount: 625, label: "Painting 10: 1.25 × 1.75 ft", color: "#9ca3af" },
-  { amount: 625, label: "Painting 11: 1.25 × 1.75 ft", color: "#9ca3af" },
-  { amount: 625, label: "Painting 12: 1.25 × 1.75 ft", color: "#9ca3af" },
-  { amount: 5000, label: "Transportation, setup and other costs", color: "#000000" },
-];
 
 const WORKS = [
   ["new-field-painting", ""],
@@ -104,20 +89,13 @@ async function saveSignature(row) {
 }
 
 // ---------------------------------------------------------------------------
-// Render: strip, budget, stats
+// Render: gallery, stats
 // ---------------------------------------------------------------------------
 function renderGallery() {
   $("#gallery").innerHTML = WORKS.map(([f, t]) => `
     <figure><img src="/images/works/${f}.jpg" alt="${t ? esc(t) + " by Gibson Moore" : "Artwork by Gibson Moore"}" loading="lazy">${t ? `<figcaption>${esc(t)}</figcaption>` : ""}</figure>`).join("");
 }
 
-function renderBudget() {
-  const total = BUDGET.reduce((a, b) => a + b.amount, 0);
-  $("#budget-bar").innerHTML = BUDGET.map((b) => `<span style="width:${(b.amount / total) * 100}%;background:${b.color}" title="${esc(b.label)}"></span>`).join("");
-  $("#budget-table tbody").innerHTML = BUDGET.map((b) => `
-    <tr><th><span class="sw" style="background:${b.color}"></span>${esc(b.label)}<small>${Math.round((b.amount / total) * 1000) / 10}% of budget</small></th>
-    <td>$${fmt(b.amount)}</td></tr>`).join("");
-}
 
 function ago(iso) {
   const s = Math.max(1, (Date.now() - Date.parse(iso)) / 1000);
@@ -256,12 +234,11 @@ async function shareOrCopy(hint) {
 }
 document.querySelector('[data-share="instagram"]').onclick = () => shareOrCopy("Add it to your Instagram Story with a link sticker.");
 document.querySelector('[data-share="groupme"]').onclick = () => shareOrCopy("Paste it into your GroupMe chats.");
-$("#share-reddit").href = `https://www.reddit.com/r/duke/submit?url=${encodeURIComponent(pageUrl())}&title=${encodeURIComponent("Petition: a $30,000 student art series for Duke University")}`;
+$("#share-reddit").href = `https://www.reddit.com/r/duke/submit?url=${encodeURIComponent(pageUrl())}&title=${encodeURIComponent("Petition: Duke University funded student art series by Gibson Moore")}`;
 if (CONFIG.chronicleUrl) $("#press").innerHTML = `<a href="${esc(CONFIG.chronicleUrl)}" target="_blank" rel="noopener">Read The Duke Chronicle feature →</a>`;
 
 // ---------------------------------------------------------------------------
 if (page === "work") renderGallery();
-if (page === "proposal") renderBudget();
 if (page === "sign") sizePad();
 refreshStats();
 setInterval(refreshStats, 30000);
