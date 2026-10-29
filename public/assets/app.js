@@ -11,6 +11,7 @@ const CONFIG = {
 
 
 const WORKS = [
+  ["new-large-painting", ""],
   ["new-field-painting", ""],
   ["new-fisherman-painting", ""],
   ["new-portrait-drawing", ""],
