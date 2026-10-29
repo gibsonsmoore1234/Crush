@@ -4,7 +4,6 @@
 // nothing is seeded.
 
 const CONFIG = {
-  goal: 10000,
   chronicleUrl: "", // paste The Duke Chronicle article URL here once it's published
   shareText: "Sign the push for Duke University to commission a student art series collection on campus.",
 };
@@ -107,9 +106,6 @@ async function refreshStats() {
   document.querySelectorAll("[data-count]").forEach((el) => (el.textContent = fmt(stats.total)));
   document.querySelectorAll("[data-students]").forEach((el) => (el.textContent = fmt(stats.students)));
   document.querySelectorAll("[data-others]").forEach((el) => (el.textContent = fmt(stats.others)));
-  if (!$("#tracker-fill")) return;
-  $("#goal").textContent = fmt(CONFIG.goal);
-  $("#tracker-fill").style.width = stats.total ? `${Math.min(100, Math.max(1.5, (stats.total / CONFIG.goal) * 100))}%` : "0";
 }
 
 // ---------------------------------------------------------------------------

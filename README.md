@@ -9,7 +9,7 @@ The site is independent and student-led. It is not an official Duke University s
 - **Home** (`/`): the headline, a short statement, and links to sign or read the proposal.
 - **Proposal** (`/proposal`): possible subjects and locations.
 - **Artist's Work** (`/work`): a gallery of current Duke University artist works.
-- **Sign** (`/sign`): the sign form and a live counter toward 10,000.
+- **Sign** (`/sign`): the sign form and a live signature count.
 
 The colors are Duke blue, white, black and grey. The artwork keeps its own colors.
 
